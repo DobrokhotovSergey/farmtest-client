@@ -50,5 +50,14 @@ async function sendTransaction(value) {
 
 async function withdraw(value) {
     address = tonConnectUI.account.address
-    // тут просто шлем запрос на вывод
+    fetch("https://farmtest-850d9c786338.herokuapp.com/withdraw", {
+        method: "POST",
+        body: JSON.stringify({
+            address: address,
+            value: value.toString()
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    });
 }

@@ -15,9 +15,9 @@ async function connectToWallet() {
 }
 
 // Call the function
-connectToWallet().catch(error => {
-    console.error("Error connecting to wallet:", error);
-});
+// connectToWallet().catch(error => {
+//     console.error("Error connecting to wallet:", error);
+// });
 
 
 // tonConnectUI.uiOptions = {
