@@ -3,6 +3,11 @@ const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
     buttonRootId: 'ton-connect'
 });
 
+tonConnectUI.uiOptions = {
+    twaReturnUrl: 't.me/farmer_2000_Test_bot/farmer_2000_Test_webapp'
+};
+// https://t.me/MomoAI_bot/app?startapp=FDAHAO
+
 async function connectToWallet() {
     const connectedWallet = await tonConnectUI.connectWallet();
     // Do something with connectedWallet if needed
@@ -15,6 +20,6 @@ connectToWallet().catch(error => {
 });
 
 
-tonConnectUI.uiOptions = {
-    twaReturnUrl: 'https://t.me/farmer_2000_Test_bot/farmer_2000_Test_webapp'
-};
+// tonConnectUI.uiOptions = {
+//     twaReturnUrl: 'https://t.me/farmer_2000_Test_bot?game=farmer2000Test'
+// };

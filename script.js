@@ -36,3 +36,19 @@ function navigate(page) {
     document.getElementById(page).style.display = 'block';
 }
 
+async function sendTransaction(value) {
+    const transaction = {
+        messages: [
+            {
+                address: "UQCRCL1GG-4dN9hE58H1oqWD-hwFhEf0-YCsVdYVChSXt_xj", // destination address
+                amount: (value*(10**9)).toString() //Toncoin in nanotons
+            }
+        ]
+    }
+    const result = await tonConnectUI.sendTransaction(transaction)
+}
+
+async function withdraw(value) {
+    address = tonConnectUI.account.address
+    // тут просто шлем запрос на вывод
+}
