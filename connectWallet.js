@@ -6,20 +6,27 @@ const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
 tonConnectUI.uiOptions = {
     twaReturnUrl: 'https://t.me/farmer_2000_Test_bot/farmer_2000_Test_webapp'
 };
-// https://t.me/MomoAI_bot/app?startapp=FDAHAO
 
-async function connectToWallet() {
-    const connectedWallet = await tonConnectUI.connectWallet();
-    // Do something with connectedWallet if needed
-    console.log(connectedWallet);
-}
+const unsubscribe = tonConnectUI.onSingleWalletModalStateChange(() => {
+    const currentAccount = tonConnectUI.account;
+    const currentIsConnectedStatus = tonConnectUI.connected;
+    if(currentIsConnectedStatus){
+        fetch(middlewareHost + "/user", {
+            method: "POST",
+            body: JSON.stringify({
+                address: currentAccount.address
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        }).then(data => {
+            document.getElementById('user-balance').textContent = data.balance;
+        });
+    }
 
-// Call the function
-// connectToWallet().catch(error => {
-//     console.error("Error connecting to wallet:", error);
-// });
-
-
-// tonConnectUI.uiOptions = {
-//     twaReturnUrl: 'https://t.me/farmer_2000_Test_bot?game=farmer2000Test'
-// };
+});

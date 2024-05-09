@@ -38,19 +38,29 @@ function navigate(page) {
 
 async function sendTransaction(value) {
     const transaction = {
+        validUntil: Math.floor(new Date() / 1000) + 360,
         messages: [
             {
-                address: "UQCRCL1GG-4dN9hE58H1oqWD-hwFhEf0-YCsVdYVChSXt_xj", // destination address
+                //address: "UQCRCL1GG-4dN9hE58H1oqWD-hwFhEf0-YCsVdYVChSXt_xj", // destination address
+                address: "UQBZ3HVqTZOliLMe5-LKxBtca6PxYBcISIFRazhjNdO03HmV",
                 amount: (value*(10**9)).toString() //Toncoin in nanotons
             }
         ]
     }
-    const result = await tonConnectUI.sendTransaction(transaction)
+
+
+    try {
+        const result = await tonConnectUI.sendTransaction(transaction);
+        console.log("Transaction sent. Result:", result);
+        console.log(result.boc);
+    } catch (error) {
+        console.error("Failed to send transaction:", error);
+    }
 }
 
 async function withdraw(value) {
-    address = tonConnectUI.account.address
-    fetch("https://farmtest-850d9c786338.herokuapp.com/withdraw", {
+    const address = tonConnectUI.account.address
+    fetch(middlewareHost+"/withdraw", {
         method: "POST",
         body: JSON.stringify({
             address: address,
