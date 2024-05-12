@@ -11,7 +11,6 @@ const unsubscribe = tonConnectUI.onSingleWalletModalStateChange(() => {
     const currentAccount = tonConnectUI.account;
     const currentIsConnectedStatus = tonConnectUI.connected;
     if(currentIsConnectedStatus){
-        currentWalletAddress = currentAccount.address;
         fetch(middlewareHost + "/user", {
             method: "POST",
             body: JSON.stringify({
@@ -26,6 +25,7 @@ const unsubscribe = tonConnectUI.onSingleWalletModalStateChange(() => {
             }
             return response.json();
         }).then(data => {
+            userId = data.id;
             document.getElementById('user-balance').textContent = data.balance;
         });
     }

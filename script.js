@@ -53,7 +53,7 @@ async function sendTransaction(value) {
             method: "POST",
             body: JSON.stringify({
                 amount: value,
-                address: currentWalletAddress,
+                address: tonConnectUI.account.address,
                 boc: result.boc
             }),
             headers: {
@@ -66,10 +66,48 @@ async function sendTransaction(value) {
             return response.json();
         }).then(data => {
             document.getElementById('user-balance').textContent = data.user.balance;
+            let count = 0;
+            const limit = 50;
+            const interval = 10000;
+
+            const intervalId = setInterval(async () => {
+                const result = await checkDeposit(data.msgHash);
+                count++;
+                if (result && result.transactionType === 'deposit' || count >= limit) {
+                    clearInterval(intervalId);
+                }
+            }, interval);
         });
 
     } catch (error) {
         console.error("Failed to send transaction:", error);
+    }
+}
+
+async function checkDeposit(msgHash) {
+    try {
+        const response = await fetch(middlewareHost + "/status-deposit", {
+            method: "POST",
+            body: JSON.stringify({
+                userId: userId,
+                msgHash: msgHash
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        document.getElementById('user-balance').textContent = data.balance;
+
+        return data;  // Возвращаем данные для проверки статуса транзакции
+    } catch (error) {
+        console.error('Error processing deposit status:', error);
+        return null;  // Возвращаем null в случае ошибки
     }
 }
 
