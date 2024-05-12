@@ -47,12 +47,27 @@ async function sendTransaction(value) {
             }
         ]
     }
-
-
     try {
         const result = await tonConnectUI.sendTransaction(transaction);
-        console.log("Transaction sent. Result:", result);
-        console.log(result.boc);
+        fetch(middlewareHost + "/deposit", {
+            method: "POST",
+            body: JSON.stringify({
+                amount: value,
+                address: currentWalletAddress,
+                boc: result.boc
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        }).then(data => {
+            document.getElementById('user-balance').textContent = data.user.balance;
+        });
+
     } catch (error) {
         console.error("Failed to send transaction:", error);
     }
