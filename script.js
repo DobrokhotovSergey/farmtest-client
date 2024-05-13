@@ -68,7 +68,7 @@ async function sendTransaction(value) {
         messages: [
             {
                 //address: "UQCRCL1GG-4dN9hE58H1oqWD-hwFhEf0-YCsVdYVChSXt_xj", // destination address
-                address: "UQBZ3HVqTZOliLMe5-LKxBtca6PxYBcISIFRazhjNdO03HmV",
+                address: "UQA8vjvPnTI71h65HVfODbXxPn4wGEZ8QvLFxGEjnRR-pBcB",
                 amount: (value*(10**9)).toString() //Toncoin in nanotons
             }
         ]
