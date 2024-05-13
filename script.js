@@ -124,32 +124,6 @@ async function withdraw(value) {
     });
 }
 
-async function collectHarvest(seedType) {
-    const address = tonConnectUI.account.address
-    fetch(middlewareHost+"/farm/collect-harvest", {
-        method: "POST",
-        body: JSON.stringify({
-            address: address,
-            userId: userId,
-            seedType: seedType
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
-    }).then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    }).then(data => {
-        if(data.success){
-            document.getElementById('successMessage').textContent = JSON.stringify(data);
-        }else{
-            document.getElementById('farm-error-msg').textContent = data.error;
-        }
-
-    });
-}
 function navigate(pageId) {
 
     let pages = document.getElementsByClassName('page');
