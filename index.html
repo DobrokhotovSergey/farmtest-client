@@ -12,13 +12,12 @@
     <h2>Рынок</h2>
     <div id="potato">
         <p>Картошка цена 0.1 Тон</p>
-        <button onclick="buySeeds('potato')">Купить за 0.1</button>
-        <button onclick="collectHarvest('potato')">Собрать урожай картошки</button>
+        <button onclick="buySeeds('potato')">Купить</button>
     </div>
     <div id="carrot">
         <p>Морковь цена 0.5 Тон</p>
         <button onclick="buySeeds('carrot')">Купить</button>
-        <button onclick="collectHarvest('carrot')">Собрать урожай морковки</button>
+
     </div>
     <div id="errorMessage"></div>
     <div id="successMessage"></div>
@@ -31,6 +30,15 @@
 </div>
 <div id="farm" class="page" style="display:none;">
     <h2>Ферма</h2>
+    <div id="farm-potato" style="display:none;" >
+        <div  style="display:none;" id="farm-potato-planted"><h2>Посажена картошка</h2></div>
+        <button id="farm-potato-btn" style="display:none;" onclick="collectHarvest('potato')">Собрать урожай картошки</button>
+    </div>
+    <div id="farm-carrot" style="display:none;" >
+        <div  style="display:none;" id="farm-carrot-planted"><h2>Посажена морковка</h2></div>
+        <button id="farm-carrot-btn" style="display:none;" onclick="collectHarvest('carrot')">Собрать урожай морковки</button>
+    </div>
+    <div id="farm-error-msg"></div>
     <!-- Содержимое страницы Ферма -->
 </div>
 <div id="farming" class="page" style="display:none;">

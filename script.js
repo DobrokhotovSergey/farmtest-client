@@ -1,31 +1,5 @@
 navigate('market');
 
-function navigate(pageId) {
-    var pages = document.getElementsByClassName('page');
-    for (var i = 0; i < pages.length; i++) {
-        pages[i].style.display = 'none';
-    }
-    document.getElementById(pageId).style.display = 'block';
-    if(pageId == 'farm'){
-        const address = tonConnectUI.account.address
-        fetch(middlewareHost+"/farm/field", {
-            method: "POST",
-            body: JSON.stringify({
-                userId: userId
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            }
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        }).then(data => {
-
-        });
-    }
-}
 
 
 function buySeeds(seedType) {
@@ -67,7 +41,6 @@ async function sendTransaction(value) {
         validUntil: Math.floor(new Date() / 1000) + 360,
         messages: [
             {
-                //address: "UQCRCL1GG-4dN9hE58H1oqWD-hwFhEf0-YCsVdYVChSXt_xj", // destination address
                 address: "UQA8vjvPnTI71h65HVfODbXxPn4wGEZ8QvLFxGEjnRR-pBcB",
                 amount: (value*(10**9)).toString() //Toncoin in nanotons
             }
@@ -172,8 +145,45 @@ async function collectHarvest(seedType) {
         if(data.success){
             document.getElementById('successMessage').textContent = JSON.stringify(data);
         }else{
-            document.getElementById('errorMessage').textContent = data.error;
+            document.getElementById('farm-error-msg').textContent = data.error;
         }
 
     });
+}
+function navigate(pageId) {
+
+    let pages = document.getElementsByClassName('page');
+    for (let i = 0; i < pages.length; i++) {
+        pages[i].style.display = 'none';
+    }
+    document.getElementById(pageId).style.display = 'block';
+    if(pageId === 'farm'){
+        document.getElementById('farm-error-msg').textContent = '';
+        fetch(middlewareHost+"/farm/field", {
+            method: "POST",
+            body: JSON.stringify({
+                userId: userId
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        }).then(data => {
+            if(data.error!=null){
+                document.getElementById('farm-error-msg').textContent = data.error;
+            }
+            data.fields.forEach(farm => {
+                document.getElementById('farm-'+farm.seedType).style.display = 'block';
+                if(farm.status === 'planted'){
+                    document.getElementById('farm-'+farm.seedType+'-planted').style.display = 'block';
+                }else if(farm.status === 'harvest'){
+                    document.getElementById('farm-'+farm.seedType+'-btn').style.display = 'block';
+                }
+            })
+        });
+    }
 }
