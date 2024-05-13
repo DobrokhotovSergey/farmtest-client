@@ -131,3 +131,18 @@ async function withdraw(value) {
         }
     });
 }
+
+async function collectHarvest(seedType) {
+    const address = tonConnectUI.account.address
+    fetch(middlewareHost+"/collect-harvest", {
+        method: "POST",
+        body: JSON.stringify({
+            address: address,
+            userId: userId,
+            seedType: seedType
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    });
+}
