@@ -6,6 +6,25 @@ function navigate(pageId) {
         pages[i].style.display = 'none';
     }
     document.getElementById(pageId).style.display = 'block';
+    if(pageId == 'farm'){
+        const address = tonConnectUI.account.address
+        fetch(middlewareHost+"/farm/field", {
+            method: "POST",
+            body: JSON.stringify({
+                userId: userId
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        }).then(data => {
+
+        });
+    }
 }
 
 
@@ -134,7 +153,7 @@ async function withdraw(value) {
 
 async function collectHarvest(seedType) {
     const address = tonConnectUI.account.address
-    fetch(middlewareHost+"/collect-harvest", {
+    fetch(middlewareHost+"/farm/collect-harvest", {
         method: "POST",
         body: JSON.stringify({
             address: address,
@@ -144,5 +163,17 @@ async function collectHarvest(seedType) {
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    }).then(data => {
+        if(data.success){
+            document.getElementById('successMessage').textContent = JSON.stringify(data);
+        }else{
+            document.getElementById('errorMessage').textContent = data.error;
+        }
+
     });
 }

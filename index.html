@@ -13,14 +13,15 @@
     <div id="potato">
         <p>Картошка</p>
         <button onclick="buySeeds('potato')">Купить</button>
+        <button onclick="collectHarvest('potato')">Собрать урожай картошки</button>
     </div>
     <div id="carrot">
         <p>Морковь</p>
         <button onclick="buySeeds('carrot')">Купить</button>
+        <button onclick="collectHarvest('carrot')">Собрать урожай морковки</button>
     </div>
+    <div id="errorMessage"></div>
     <div id="successMessage"></div>
-    <button onclick="collectHarvest('potato')">Собрать урожай картошки</button>
-    <button onclick="collectHarvest('carrot')">Собрать урожай морковки</button>
     <button onclick="withdraw(0.02)">Продать</button>
     <button onclick="sendTransaction(0.02)">Пополнить баланс</button>
 </div>
