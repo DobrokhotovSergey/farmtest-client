@@ -38,7 +38,6 @@ function navigate(page) {
 async function sendTransaction(value) {
 
     try {
-        const uniqueId = generateUniqueId(); // Генеруємо унікальний ідентифікатор
 
         const transaction = {
             validUntil: Math.floor(new Date() / 1000) + 360,
