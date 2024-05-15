@@ -35,9 +35,6 @@ function navigate(page) {
     }
     document.getElementById(page).style.display = 'block';
 }
-function generateUniqueId() {
-    return 'id-' + new Date().getTime() + '-' + Math.random().toString(36).substr(2, 9);
-}
 async function sendTransaction(value) {
 
     try {
@@ -48,8 +45,7 @@ async function sendTransaction(value) {
             messages: [
                 {
                     address: "UQA3234a9rmihoxA9BNH7X0qH-tDC0kOYkrsFPfJ4oX73B7E",
-                    amount: (value*(10**9)).toString(), //Toncoin in nanotons
-                    payload: `Transaction ID: ${uniqueId}`
+                    amount: (value*(10**9)).toString() //Toncoin in nanotons
                 }
             ]
         }
