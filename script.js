@@ -35,16 +35,21 @@ function navigate(page) {
     }
     document.getElementById(page).style.display = 'block';
 }
-
+function generateUniqueId() {
+    return 'id-' + new Date().getTime() + '-' + Math.random().toString(36).substr(2, 9);
+}
 async function sendTransaction(value) {
 
     try {
+        const uniqueId = generateUniqueId(); // Генеруємо унікальний ідентифікатор
+
         const transaction = {
             validUntil: Math.floor(new Date() / 1000) + 360,
             messages: [
                 {
                     address: "UQA3234a9rmihoxA9BNH7X0qH-tDC0kOYkrsFPfJ4oX73B7E",
-                    amount: (value*(10**9)).toString() //Toncoin in nanotons
+                    amount: (value*(10**9)).toString(), //Toncoin in nanotons
+                    comment: `Transaction ID: ${uniqueId}`
                 }
             ]
         }
