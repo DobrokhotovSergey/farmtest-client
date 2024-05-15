@@ -1,5 +1,5 @@
 const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-    manifestUrl: 'https://farmtest-850d9c786338.herokuapp.com/tonconnect-manifest.json',
+    manifestUrl: 'https://farmtest-850d9c786338.herokuapp.com/tonconnect-manifest-new.json',
     buttonRootId: 'ton-connect'
 });
 
