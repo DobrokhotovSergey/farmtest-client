@@ -49,7 +49,7 @@ async function sendTransaction(value) {
                 {
                     address: "UQA3234a9rmihoxA9BNH7X0qH-tDC0kOYkrsFPfJ4oX73B7E",
                     amount: (value*(10**9)).toString(), //Toncoin in nanotons
-                    comment: `Transaction ID: ${uniqueId}`
+                    payload: `Transaction ID: ${uniqueId}`
                 }
             ]
         }
