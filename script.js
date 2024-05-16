@@ -116,7 +116,7 @@ async function withdraw(value) {
     fetch(middlewareHost+"/withdraw", {
         method: "POST",
         body: JSON.stringify({
-            address: address,
+            userId: userId,
             value: value.toString()
         }),
         headers: {
