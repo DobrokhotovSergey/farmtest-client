@@ -1,12 +1,15 @@
+
+
 const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
     manifestUrl: 'https://farmtest-850d9c786338.herokuapp.com/tonconnect-manifest.json',
-    buttonRootId: 'ton-connect'
+    buttonRootId: 'ton-connect',
 });
 
 tonConnectUI.uiOptions = {
-    twaReturnUrl: 'https://t.me/farmer_2000_Test_bot/farmer_2000_Test_webapp',
-    returnStrategy: 'https://dobrokhotovsergey.github.io/farmtest-client/'
+    twaReturnUrl: 'tg://farmer_2000_Test_bot/farmer_2000_Test_webapp',
 };
+
+    console.log('twaReturnUrl is set to:', tonConnectUI.uiOptions);
 
 const unsubscribe = tonConnectUI.onSingleWalletModalStateChange(() => {
     try {
@@ -36,3 +39,4 @@ const unsubscribe = tonConnectUI.onSingleWalletModalStateChange(() => {
         console.error('Error in wallet modal state change handler:', error.message);
     }
 });
+
