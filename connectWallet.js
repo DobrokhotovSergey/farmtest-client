@@ -10,6 +10,7 @@ const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
 });
 
 tonConnectUI.uiOptions = {
+    returnStrategy: 'https://t.me/farmer_2000_Test_bot/farmer_2000_Test_webapp',
     twaReturnUrl: 'https://t.me/farmer_2000_Test_bot/farmer_2000_Test_webapp'
 };
 
