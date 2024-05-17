@@ -109,11 +109,12 @@ async function checkDeposit(msgHash) {
 }
 
 async function withdraw() {
+    let withdrawValue = document.getElementById('withdraw-value').value;
     fetch(middlewareHost+"/withdraw", {
         method: "POST",
         body: JSON.stringify({
             userId: userId,
-            value: value.toString()
+            value: withdrawValue.toString()
         }),
         headers: {
             "Content-type": "application/json; charset=UTF-8"
