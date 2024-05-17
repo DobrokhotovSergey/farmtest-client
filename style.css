@@ -160,3 +160,16 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
 }
+input[type="number"], button {
+    flex-grow: 1; /* Позволяет элементам расти и занимать доступное пространство */
+    margin: 5px; /* Отступы вокруг элементов для визуального разделения */
+}
+
+button {
+    width: auto; /* Автоматическая ширина в зависимости от содержимого */
+    padding: 10px 20px; /* Паддинги для кнопок */
+}
+
+input[type="number"] {
+    margin-right: 10px; /* Дополнительный отступ справа от инпута */
+}

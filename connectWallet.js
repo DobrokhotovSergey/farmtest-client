@@ -1,12 +1,21 @@
-const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-    manifestUrl: 'https://farmtest-850d9c786338.herokuapp.com/tonconnect-manifest.json',
-    buttonRootId: 'ton-connect'
-});
+try {
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+        manifestUrl: 'https://farmtest-850d9c786338.herokuapp.com/tonconnect-manifest.json',
+        buttonRootId: 'ton-connect'
+    });
+}
+catch (error) {
+        console.error('Error in tonConnectUI:', error.message);
+    }
 
-tonConnectUI.uiOptions = {
-    twaReturnUrl: 'https://t.me/farmer_2000_Test_bot/farmer_2000_Test_webapp'
-};
-
+try {
+    tonConnectUI.uiOptions = {
+        twaReturnUrl: 'https://t.me/farmer_2000_Test_bot/farmer_2000_Test_webapp'
+    };
+}
+catch (error) {
+        console.error('Error in  tonConnectUI.uiOptions:', error.message);
+    }
 const unsubscribe = tonConnectUI.onSingleWalletModalStateChange(() => {
     try {
         const currentAccount = tonConnectUI.account;
