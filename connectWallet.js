@@ -1,28 +1,3 @@
-// function isLinkToTelegram(url) {
-//     // Проверяем, начинается ли URL с 'tg://' или содержит 't.me'
-//     return url.startsWith('tg://') || url.includes('t.me');
-// }
-//
-// function isInTWA() {
-//     // Эта функция должна определить, запущено ли приложение в среде Telegram Web Apps
-//     // Это пример, вам нужно будет определить это на основе реальных данных вашего приложения
-//     return window.location.href.includes('t.me');
-// }
-//
-// let finalReturnStrategy;
-//
-// if (isLinkToTelegram('https://dobrokhotovsergey.github.io/farmtest-client/')) {
-//     if (isInTWA()) {
-//         finalReturnStrategy = actionsConfiguration.twaReturnUrl;
-//         if (!finalReturnStrategy) {
-//             finalReturnStrategy = actionsConfiguration.returnStrategy;
-//         }
-//     } else {
-//         finalReturnStrategy = 'none'; // Или другой URL/логика в зависимости от ситуации
-//     }
-// } else {
-//     finalReturnStrategy = actionsConfiguration.returnStrategy;
-// }
 // Init TWA
 Telegram.WebApp.ready();
 
@@ -65,33 +40,32 @@ function toggleMainButton() {
     }
 };
 
+function setViewportData() {
+    var sizeEl = document.getElementById('viewport-params-size');
+    sizeEl.innerText = 'width: ' + window.innerWidth + ' x ' +
+        'height: ' + Telegram.WebApp.viewportStableHeight;
+
+    var expandEl = document.querySelector('#viewport-params-expand');
+    expandEl.innerText = 'Is Expanded: ' + (Telegram.WebApp.isExpanded ? 'true' : 'false');
+}
 
 Telegram.WebApp.setHeaderColor('secondary_bg_color');
+
+setViewportData();
+Telegram.WebApp.onEvent('viewportChanged', setViewportData);
 
 Telegram.WebApp.onEvent('themeChanged', function() {
     document.body.setAttribute('style', '--bg-color:' + Telegram.WebApp.backgroundColor);
 });
 
 
-
-class CustomTonConnectUI extends TON_CONNECT_UI.TonConnectUI {
-    set uiOptions(options) {
-        super.uiOptions = options;
-        this._uiOptions = options;  // Сохраняем локально
-    }
-
-    get uiOptions() {
-        return this._uiOptions;  // Возвращаем сохраненные опции
-    }
-}
-
-const tonConnectUI = new CustomTonConnectUI({
+const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
     manifestUrl: 'https://farmtest-850d9c786338.herokuapp.com/tonconnect-manifest.json',
     buttonRootId: 'ton-connect'
 });
 
 tonConnectUI.uiOptions = {
-    twaReturnUrl: 'tg://farmer_2000_Test_bot/farmer_2000_Test_webapp'
+    twaReturnUrl: 'https://farmer_2000_Test_bot/farmer_2000_Test_webapp'
 };
 
 

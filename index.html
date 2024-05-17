@@ -57,17 +57,22 @@
     <h2>Друзья</h2>
     <!-- Содержимое страницы Друзья -->
 </div>
-    <div class="navigation">
-        <button class="active" onclick="navigate('market')">Рынок</button>
-        <button onclick="navigate('info')">Инфо</button>
-        <button onclick="navigate('farm')">Ферма</button>
-        <button onclick="navigate('farming')">Farming</button>
-        <button onclick="navigate('friends')">Друзья</button>
-    </div>
+<!--    <div class="navigation">-->
+<!--        <button class="active" onclick="navigate('market')">Рынок</button>-->
+<!--        <button onclick="navigate('info')">Инфо</button>-->
+<!--        <button onclick="navigate('farm')">Ферма</button>-->
+<!--        <button onclick="navigate('farming')">Farming</button>-->
+<!--        <button onclick="navigate('friends')">Друзья</button>-->
+<!--    </div>-->
+<div id="viewport"></div>
+<div id="viewport-params-size"></div>
+<div id="viewport-params-expand"></div>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 <script src="config.js"></script>
 <script src="script.js"></script>
 <script src="connectWallet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
 </body>
 </html>
