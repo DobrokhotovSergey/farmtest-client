@@ -4,9 +4,7 @@ const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
 });
 
 tonConnectUI.uiOptions = {
-    actionsConfiguration: {
-        returnStrategy: 'none'  // Не осуществлять переход после действий пользователя
-    }
+    twaReturnUrl: 'https://t.me/farmer_2000_Test_bot/farmer_2000_Test_webapp'
 };
 
 const unsubscribe = tonConnectUI.onSingleWalletModalStateChange(() => {
