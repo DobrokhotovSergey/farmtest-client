@@ -7,7 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div>BALANCE: <span id="user-balance"></span></div>
+<div class="top-bar">
+    <div>BALANCE: <span id="user-balance" style="margin-top: 10px"></span></div>
+
+    <div id="ton-connect"></div>
+</div>
 <div id="market" class="page">
     <h2>Рынок</h2>
     <div id="potato">
@@ -21,8 +25,14 @@
     </div>
     <div id="errorMessage"></div>
     <div id="successMessage"></div>
-    <button onclick="withdraw(0.02)">Продать</button>
-    <button onclick="sendTransaction(0.06)">Пополнить баланс</button>
+    <div id="withdraw">
+        <input type="number" id="withdraw-value" placeholder="Сумма для вывода из баланса" step="0.01" min="0">
+        <button onclick="withdraw()">Продать</button>
+    </div>
+    <div id="top-up-balance">
+        <input id="transaction-value" type="number" placeholder="Сумма для пополнения баланса" step="0.01" min="0">
+        <button onclick="sendTransaction()">Пополнить баланс</button>
+    </div>
 </div>
 <div id="info" class="page" style="display:none;">
     <h2>Инфо</h2>
@@ -47,14 +57,13 @@
     <h2>Друзья</h2>
     <!-- Содержимое страницы Друзья -->
 </div>
-<div id="ton-connect"></div>
-<div class="navigation">
-    <button onclick="navigate('market')">Рынок</button>
-    <button onclick="navigate('info')">Инфо</button>
-    <button onclick="navigate('farm')">Ферма</button>
-    <button onclick="navigate('farming')">Farming</button>
-    <button onclick="navigate('friends')">Друзья</button>
-</div>
+    <div class="navigation">
+        <button class="active" onclick="navigate('market')">Рынок</button>
+        <button onclick="navigate('info')">Инфо</button>
+        <button onclick="navigate('farm')">Ферма</button>
+        <button onclick="navigate('farming')">Farming</button>
+        <button onclick="navigate('friends')">Друзья</button>
+    </div>
 <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 <script src="config.js"></script>
 <script src="script.js"></script>

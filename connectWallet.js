@@ -8,26 +8,30 @@ tonConnectUI.uiOptions = {
 };
 
 const unsubscribe = tonConnectUI.onSingleWalletModalStateChange(() => {
-    const currentAccount = tonConnectUI.account;
-    const currentIsConnectedStatus = tonConnectUI.connected;
-    if(currentIsConnectedStatus){
-        fetch(middlewareHost + "/user", {
-            method: "POST",
-            body: JSON.stringify({
-                address: currentAccount.address
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            }
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        }).then(data => {
-            userId = data.id;
-            document.getElementById('user-balance').textContent = data.balance;
-        });
+    try {
+        const currentAccount = tonConnectUI.account;
+        const currentIsConnectedStatus = tonConnectUI.connected;
+        if(currentIsConnectedStatus){
+            fetch(middlewareHost + "/user", {
+                method: "POST",
+                body: JSON.stringify({
+                    address: currentAccount.address
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            }).then(data => {
+                document.getElementById('user-balance').textContent = data.balance;
+            }).catch(error => {
+                console.error('Error during fetch operation:', error.message);
+            });
+        }
+    } catch (error) {
+        console.error('Error in wallet modal state change handler:', error.message);
     }
-
 });

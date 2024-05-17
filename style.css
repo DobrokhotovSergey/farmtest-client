@@ -1,115 +1,162 @@
+/* Базовая стилизация страницы */
 body, html {
-    padding: 0;
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #e9ecef;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    overflow-x: hidden; /* Предотвращает горизонтальную прокрутку */
 }
 
+/* Основные элементы страницы */
 .page {
-    padding: 10px;
-    display: none;
+    display: none; /* Скрытие всех страниц по умолчанию */
+    padding: 20px;
+    background: white;
+    margin: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.navigation {
-    display: flex; /* Использование flexbox для равномерного распределения кнопок */
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #343a40;
-    box-shadow: 0 -2px 4px rgba(0,0,0,0.2); /* Тень для лучшей видимости на светлых страницах */
+/* Стилизация заголовков */
+h2 {
+    color: #333;
+    text-align: center;
+    margin: 10px 0;
 }
 
-.navigation button {
-    flex-grow: 1; /* Равномерное распределение пространства между кнопками */
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-    background-color: #6c757d;
-    border: none; /* Удаление стандартных стилей границы */
-    transition: background-color 0.3s; /* Плавное изменение фона при наведении */
-    outline: none; /* Удаление контура при фокусе */
-}
-
-.navigation button:hover {
-    background-color: #5a6268;
-}
-
-.navigation button:active {
-    background-color: #545b62; /* Еще темнее при активации */
-}
-
+/* Стилизация кнопок */
 button {
-    padding: 8px 16px;
-    font-size: 16px; /* Увеличенный шрифт для лучшей видимости на мобильных устройствах */
-    color: white;
-    background-color: #007bff;
+    display: block;
+    width: 90%; /* Подгонка ширины под контейнер */
+    margin: 10px auto;
+    padding: 12px;
+    font-size: 16px;
     border: none;
-    border-radius: 5px; /* Скругление углов для современного вида */
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
     cursor: pointer;
-    outline: none;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: background-color 0.3s;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-button:active {
-    transform: scale(0.98); /* Небольшое уменьшение при нажатии для эффекта кнопки */
-}
-
-/* Стили для контейнеров продуктов */
-#potato, #carrot {
-    margin-bottom: 20px;
-    padding: 10px;
+/* Стили для поля ввода */
+input[type="text"], input[type="number"] {
+    display: block;
+    width: 90%; /* Ширина поля ввода подогнана под контейнер */
+    margin: 10px auto;
+    padding: 12px;
+    font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f8f9fa;
+    border-radius: 5px;
 }
 
-#potato p, #carrot p {
+/* Навигация в футере */
+
+
+/* Сообщения об ошибках и успехах */
+#errorMessage, #successMessage {
+    color: red;
+    text-align: center;
+    margin: 10px 0;
+}
+
+#successMessage {
+    color: green;
+}
+
+/* Адаптивные стили для мобильных и десктопных устройств */
+@media (max-width: 768px) {
+    .page, input[type="text"],input[type="number"], button {
+        width: 90%; /* Увеличиваем ширину элементов для мобильных устройств */
+        margin: 10px auto;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+}
+
+
+/* Стили для навигационных кнопок */
+.navigation {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.navigation button {
+    flex-grow: 1;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 0; /* Убираем закругление */
+    width: 20%; /* Ширина каждой кнопки */
+    padding: 10px 0; /* Вертикальный паддинг */
+    aspect-ratio: 1; /* Соотношение сторон 1:1 делает кнопку квадратной */
+}
+
+.navigation button:hover, .navigation button.active  {
+    background-color: #0056b3;
+}
+
+/* Адаптивные медиа-запросы для мобильных устройств */
+@media (max-width: 360px) {
+    .navigation button {
+        font-size: 14px; /* Меньший размер шрифта для маленьких экранов */
+        padding: 8px 0; /* Меньший вертикальный паддинг */
+    }
+}
+
+@media (min-width: 361px) {
+    .navigation button {
+        font-size: 16px; /* Стандартный размер шрифта */
+        padding: 10px 0; /* Стандартный вертикальный паддинг */
+    }
+}
+
+@media (min-width: 601px) {
+    .navigation button {
+        font-size: 18px; /* Больший размер шрифта для больших экранов */
+        padding: 12px 0; /* Больший вертикальный паддинг */
+    }
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-around; /* Равномерное распределение контента по горизонтали */
+    align-items: center; /* Выравнивание элементов по центру по вертикали */
+    width: 100%; /* Ширина контейнера равна ширине страницы */
+    background-color: #f8f8f8; /* Фоновый цвет, если необходим */
+    padding: 10px 0; /* Верхний и нижний отступы для визуального комфорта */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Необязательная тень для визуального выделения */
+}
+
+#ton-connect {
+    /* Пример стилизации, если необходимо */
+    width: 100px; /* Пример ширины */
+    height: 50px; /* Пример высоты */
+    background-color: #ddd; /* Цвет фона */
+    display: flex; /* Используем flex для центрирования внутреннего содержимого, если оно есть */
+    justify-content: center;
+    align-items: center;
+}
+/* Скрыть стрелки управления числом в WebKit-браузерах */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
     margin: 0;
-    margin-bottom: 10px;
-    font-weight: bold;
 }
 
-/* Стили для счетчика количества */
-#potato span, #carrot span {
-    margin: 0 10px;
-    font-size: 16px; /* Четкое отображение на мобильных устройствах */
-}
-
-/* Улучшенные стили для кнопок + и - */
-button.quantity-change {
-    padding: 8px 12px; /* Немного меньше, чтобы подходить для + и - */
-    min-width: 40px; /* Минимальная ширина для удобства нажатия на мобильных устройствах */
-    font-size: 18px; /* Большой текст для легкости использования */
-}
-
-/* Улучшения адаптивности */
-@media (max-width: 768px) {
-    button {
-        padding: 12px 24px; /* Больше пространства для удобства на маленьких экранах */
-        font-size: 18px; /* Увеличение размера текста для лучшей читаемости */
-    }
-
-    button.quantity-change {
-        min-width: 50px; /* Увеличение для легкости нажатия на маленьких экранах */
-    }
-}
-
-/* Адаптация стилей для маленьких экранов */
-@media (max-width: 768px) {
-    .navigation button {
-        padding: 12px 10px; /* Увеличенный отступ для лучшей доступности */
-        font-size: 18px; /* Больший шрифт для лучшей видимости */
-    }
-}
-
-/* Адаптация стилей для очень маленьких экранов */
-@media (max-width: 480px) {
-    .navigation button {
-        padding: 15px 10px; /* Дополнительный отступ для удобства на самых маленьких устройствах */
-        font-size: 14px; /* Меньший шрифт для сохранения места */
-    }
+/* Скрыть стрелки управления числом в Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }

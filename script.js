@@ -1,7 +1,4 @@
 navigate('market');
-
-
-
 function buySeeds(seedType) {
 
     fetch(middlewareHost + "/purchases", {
@@ -35,8 +32,8 @@ function navigate(page) {
     }
     document.getElementById(page).style.display = 'block';
 }
-async function sendTransaction(value) {
-
+async function sendTransaction() {
+    let transactionValue = document.getElementById('transaction-value').value;
     try {
 
         const transaction = {
@@ -44,7 +41,7 @@ async function sendTransaction(value) {
             messages: [
                 {
                     address: "UQA3234a9rmihoxA9BNH7X0qH-tDC0kOYkrsFPfJ4oX73B7E",
-                    amount: (value*(10**9)).toString() //Toncoin in nanotons
+                    amount: (transactionValue*(10**9)).toString() //Toncoin in nanotons
                 }
             ]
         }
@@ -52,7 +49,7 @@ async function sendTransaction(value) {
         fetch(middlewareHost + "/deposit", {
             method: "POST",
             body: JSON.stringify({
-                amount: value,
+                amount: transactionValue,
                 address: tonConnectUI.account.address,
                 boc: result.boc
             }),
@@ -111,8 +108,7 @@ async function checkDeposit(msgHash) {
     }
 }
 
-async function withdraw(value) {
-    const address = tonConnectUI.account.address
+async function withdraw() {
     fetch(middlewareHost+"/withdraw", {
         method: "POST",
         body: JSON.stringify({
@@ -130,6 +126,13 @@ function navigate(pageId) {
     let pages = document.getElementsByClassName('page');
     for (let i = 0; i < pages.length; i++) {
         pages[i].style.display = 'none';
+    }
+    let navigationElements = document.getElementsByClassName('navigation');
+    for (let i = 0; i < navigationElements.length; i++) {
+        let buttons = navigationElements[i].getElementsByTagName('button');
+        for (let j = 0; j < buttons.length; j++) {
+            buttons[j].classList.remove('active');
+        }
     }
     document.getElementById(pageId).style.display = 'block';
     if(pageId === 'farm'){
