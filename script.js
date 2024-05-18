@@ -45,7 +45,7 @@ async function sendTransaction() {
                 }
             ]
         }
-        const result = await tonConnectUI.sendTransaction(transaction);
+        const result = await tonConnectUI.sendTransaction(transaction, { skipRedirectToWallet: 'never' });
         fetch(middlewareHost + "/deposit", {
             method: "POST",
             body: JSON.stringify({
