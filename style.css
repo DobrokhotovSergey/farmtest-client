@@ -48,6 +48,7 @@ text{
 .products object {
     width: 100%;
     height: 100%;
+    pointer-events: none;
 }
 /* Основные элементы страницы */
 .page {
