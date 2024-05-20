@@ -113,7 +113,7 @@ async function withdraw() {
         method: "POST",
         body: JSON.stringify({
             userId: userId,
-            value: withdrawValue.toString()
+            amount: withdrawValue.toString()
         }),
         headers: {
             "Content-type": "application/json; charset=UTF-8"
