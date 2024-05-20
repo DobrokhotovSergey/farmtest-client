@@ -1,28 +1,28 @@
 navigate('market');
 function buySeeds(seedType) {
 
-    fetch(middlewareHost + "/purchases", {
-        method: "POST",
-        body: JSON.stringify({
-            userId: userId,
-            seedType: seedType
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
-    }).then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    }).then(data => {
-        if(!data.success){
-            document.getElementById('successMessage').textContent = data.error;
-        }else{
-            document.getElementById('successMessage').textContent = 'Вы купили картошку';
-            document.getElementById('user-balance').textContent = data.balance;
-        }
-    });
+    // fetch(middlewareHost + "/purchases", {
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //         userId: userId,
+    //         seedType: seedType
+    //     }),
+    //     headers: {
+    //         "Content-type": "application/json; charset=UTF-8"
+    //     }
+    // }).then(response => {
+    //     if (!response.ok) {
+    //         throw new Error('Network response was not ok ' + response.statusText);
+    //     }
+    //     return response.json();
+    // }).then(data => {
+    //     if(!data.success){
+    //         document.getElementById('successMessage').textContent = data.error;
+    //     }else{
+    //         document.getElementById('successMessage').textContent = 'Вы купили картошку';
+    //         document.getElementById('user-balance').textContent = data.balance;
+    //     }
+    // });
 }
 
 function navigate(page) {
