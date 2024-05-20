@@ -118,6 +118,13 @@ async function withdraw() {
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    }).then(data => {
+        document.getElementById('user-balance').textContent = data.withdraw.balance;
     });
 }
 
