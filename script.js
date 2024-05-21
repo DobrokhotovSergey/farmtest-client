@@ -32,23 +32,30 @@ function navigate(page) {
     document.getElementById(page).style.display = 'block';
 }
 
-function sendDepositRequest(transactionValue, result) {
+async function sendDepositRequest(transactionValue, result) {
     return new Promise((resolve, reject) => {
-        const data = JSON.stringify({
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", middlewareHost + "/deposit", true);
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+
+        xhr.onreadystatechange = () => {
+            if (xhr.status === 200) {
+                resolve(JSON.parse(xhr.responseText));
+            } else {
+                reject(new Error('Network response was not ok ' + xhr.statusText));
+            }
+        };
+
+        const requestData = JSON.stringify({
             amount: transactionValue,
             address: tonConnectUI.account.address,
             boc: result.boc
         });
 
-        Telegram.WebApp.sendData(data, (response) => {
-            if (response.status === 'ok') {
-                resolve(response.data);
-            } else {
-                reject(new Error('Network response was not ok ' + response.statusText));
-            }
-        });
+        xhr.send(requestData);
     });
 }
+
 
 async function sendTransaction() {
     let transactionValue = document.getElementById('transaction-value').value;
@@ -64,28 +71,52 @@ async function sendTransaction() {
         };
 
         const result = await tonConnectUI.sendTransaction(transaction);
-        const data = await sendDepositRequest(transactionValue, result);
 
-        document.getElementById('user-balance').textContent = data.user.balance;
-        let count = 0;
-        const limit = 30;
-        const interval = 10000;
+        // Сохранение данных транзакции в локальное хранилище
+        localStorage.setItem('pendingTransaction', JSON.stringify({
+            transactionValue: transactionValue,
+            result: result
+        }));
 
-        const intervalId = setInterval(async () => {
-            try {
-                const checkResult = await checkDeposit(data.msgHash);
-                count++;
-                if (checkResult && checkResult.transactionType === 'deposit' || count >= limit) {
-                    clearInterval(intervalId);
-                }
-            } catch (error) {
-                console.error('Error checking deposit:', error);
-            }
-        }, interval);
+        // Перенаправление пользователя обратно в приложение
+        Telegram.WebApp.close();
     } catch (error) {
         console.error("Failed to send transaction:", error);
     }
 }
+
+async function checkPendingTransaction() {
+    const pendingTransaction = localStorage.getItem('pendingTransaction');
+    if (pendingTransaction) {
+        const { transactionValue, result } = JSON.parse(pendingTransaction);
+
+        try {
+            const data = await sendDepositRequest(transactionValue, result);
+            document.getElementById('user-balance').textContent = data.user.balance;
+            localStorage.removeItem('pendingTransaction'); // Очистка локального хранилища после успешного выполнения
+
+            let count = 0;
+            const limit = 30;
+            const interval = 10000;
+
+            const intervalId = setInterval(async () => {
+                try {
+                    const checkResult = await checkDeposit(data.msgHash);
+                    count++;
+                    if (checkResult && checkResult.transactionType === 'deposit' || count >= limit) {
+                        clearInterval(intervalId);
+                    }
+                } catch (error) {
+                    console.error('Error checking deposit:', error);
+                }
+            }, interval);
+        } catch (error) {
+            console.error('Failed to send deposit request:', error);
+        }
+    }
+}
+window.addEventListener('load', checkPendingTransaction);
+
 async function checkDeposit(msgHash) {
     try {
         const response = await fetch(middlewareHost + "/status-deposit", {
