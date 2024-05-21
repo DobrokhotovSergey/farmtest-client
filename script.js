@@ -31,89 +31,54 @@ function navigate(page) {
     }
     document.getElementById(page).style.display = 'block';
 }
-
-async function sendDepositRequest(transactionValue, result) {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", middlewareHost + "/deposit", true);
-        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-
-        xhr.onreadystatechange = () => {
-            if (xhr.status === 200) {
-                resolve(JSON.parse(xhr.responseText));
-            } else {
-                reject(new Error('Network response was not ok ' + xhr.statusText));
-            }
-        };
-
-        const requestData = JSON.stringify({
-            amount: transactionValue,
-            address: tonConnectUI.account.address,
-            boc: result.boc
-        });
-
-        xhr.send(requestData);
-    });
-}
-
-
 async function sendTransaction() {
     let transactionValue = document.getElementById('transaction-value').value;
     try {
+
         const transaction = {
             validUntil: Math.floor(new Date() / 1000) + 360,
             messages: [
                 {
                     address: "UQA3234a9rmihoxA9BNH7X0qH-tDC0kOYkrsFPfJ4oX73B7E",
-                    amount: (transactionValue * (10**9)).toString() // Toncoin in nanotons
+                    amount: (transactionValue*(10**9)).toString() //Toncoin in nanotons
                 }
             ]
-        };
-
+        }
         const result = await tonConnectUI.sendTransaction(transaction);
-
-        // Сохранение данных транзакции в локальное хранилище
-        localStorage.setItem('pendingTransaction', JSON.stringify({
-            transactionValue: transactionValue,
-            result: result
-        }));
-
-    } catch (error) {
-        console.error("Failed to send transaction:", error);
-    }
-}
-
-async function checkPendingTransaction() {
-    const pendingTransaction = localStorage.getItem('pendingTransaction');
-    if (pendingTransaction) {
-        const { transactionValue, result } = JSON.parse(pendingTransaction);
-
-        try {
-            const data = await sendDepositRequest(transactionValue, result);
+        fetch(middlewareHost + "/deposit", {
+            method: "POST",
+            body: JSON.stringify({
+                amount: transactionValue,
+                address: tonConnectUI.account.address,
+                boc: result.boc
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        }).then(data => {
             document.getElementById('user-balance').textContent = data.user.balance;
-            localStorage.removeItem('pendingTransaction'); // Очистка локального хранилища после успешного выполнения
-
             let count = 0;
             const limit = 30;
             const interval = 10000;
 
             const intervalId = setInterval(async () => {
-                try {
-                    const checkResult = await checkDeposit(data.msgHash);
-                    count++;
-                    if (checkResult && checkResult.transactionType === 'deposit' || count >= limit) {
-                        clearInterval(intervalId);
-                    }
-                } catch (error) {
-                    console.error('Error checking deposit:', error);
+                const result = await checkDeposit(data.msgHash);
+                count++;
+                if (result && result.transactionType === 'deposit' || count >= limit) {
+                    clearInterval(intervalId);
                 }
             }, interval);
-        } catch (error) {
-            console.error('Failed to send deposit request:', error);
-        }
+        });
+
+    } catch (error) {
+        console.error("Failed to send transaction:", error);
     }
 }
-window.addEventListener('load', checkPendingTransaction);
 
 async function checkDeposit(msgHash) {
     try {
