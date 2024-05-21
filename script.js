@@ -1,4 +1,5 @@
 navigate('market');
+console.log("START")
 function buySeeds(seedType) {
     fetch(middlewareHost + "/purchases", {
         method: "POST",
