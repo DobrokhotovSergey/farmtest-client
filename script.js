@@ -32,48 +32,40 @@ function navigate(page) {
     document.getElementById(page).style.display = 'block';
 }
 
-async function sendDepositRequest(transactionValue, result) {
+function sendDepositRequest(transactionValue, result) {
     return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", middlewareHost + "/deposit", true);
-        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    resolve(JSON.parse(xhr.responseText));
-                } else {
-                    reject(new Error('Network response was not ok ' + xhr.statusText));
-                }
-            }
-        };
-
-        const requestData = JSON.stringify({
+        const data = JSON.stringify({
             amount: transactionValue,
             address: tonConnectUI.account.address,
             boc: result.boc
         });
 
-        xhr.send(requestData);
+        Telegram.WebApp.sendData(data, (response) => {
+            if (response.status === 'ok') {
+                resolve(response.data);
+            } else {
+                reject(new Error('Network response was not ok ' + response.statusText));
+            }
+        });
     });
 }
-
 
 async function sendTransaction() {
     let transactionValue = document.getElementById('transaction-value').value;
     try {
-
         const transaction = {
             validUntil: Math.floor(new Date() / 1000) + 360,
             messages: [
                 {
                     address: "UQA3234a9rmihoxA9BNH7X0qH-tDC0kOYkrsFPfJ4oX73B7E",
-                    amount: (transactionValue*(10**9)).toString() //Toncoin in nanotons
+                    amount: (transactionValue * (10**9)).toString() // Toncoin in nanotons
                 }
             ]
-        }
+        };
+
         const result = await tonConnectUI.sendTransaction(transaction);
         const data = await sendDepositRequest(transactionValue, result);
+
         document.getElementById('user-balance').textContent = data.user.balance;
         let count = 0;
         const limit = 30;
@@ -90,12 +82,10 @@ async function sendTransaction() {
                 console.error('Error checking deposit:', error);
             }
         }, interval);
-
     } catch (error) {
         console.error("Failed to send transaction:", error);
     }
 }
-
 async function checkDeposit(msgHash) {
     try {
         const response = await fetch(middlewareHost + "/status-deposit", {
