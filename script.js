@@ -1,6 +1,8 @@
 navigate('market');
 const pendingTransaction = localStorage.getItem('pendingTransaction');
+console.log('pendingTransaction---->');
 console.log(pendingTransaction);
+console.log('<------pendingTransaction');
 function buySeeds(seedType) {
     fetch(middlewareHost + "/purchases", {
         method: "POST",
