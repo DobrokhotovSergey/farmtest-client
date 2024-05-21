@@ -34,52 +34,59 @@ function navigate(page) {
 async function sendTransaction() {
     let transactionValue = document.getElementById('transaction-value').value;
     try {
-
         const transaction = {
             validUntil: Math.floor(new Date() / 1000) + 360,
             messages: [
                 {
                     address: "UQA3234a9rmihoxA9BNH7X0qH-tDC0kOYkrsFPfJ4oX73B7E",
-                    amount: (transactionValue*(10**9)).toString() //Toncoin in nanotons
+                    amount: (transactionValue * (10**9)).toString() // Toncoin in nanotons
                 }
             ]
-        }
+        };
         const result = await tonConnectUI.sendTransaction(transaction);
-        fetch(middlewareHost + "/deposit", {
-            method: "POST",
-            body: JSON.stringify({
-                amount: transactionValue,
-                address: tonConnectUI.account.address,
-                boc: result.boc
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            }
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        }).then(data => {
-            document.getElementById('user-balance').textContent = data.user.balance;
-            let count = 0;
-            const limit = 30;
-            const interval = 10000;
 
-            const intervalId = setInterval(async () => {
-                const result = await checkDeposit(data.msgHash);
-                count++;
-                if (result && result.transactionType === 'deposit' || count >= limit) {
-                    clearInterval(intervalId);
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", middlewareHost + "/deposit", true);
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    const data = JSON.parse(xhr.responseText);
+                    document.getElementById('user-balance').textContent = data.user.balance;
+                    let count = 0;
+                    const limit = 30;
+                    const interval = 10000;
+
+                    const intervalId = setInterval(async () => {
+                        try {
+                            const checkResult = await checkDeposit(data.msgHash);
+                            count++;
+                            if (checkResult && checkResult.transactionType === 'deposit' || count >= limit) {
+                                clearInterval(intervalId);
+                            }
+                        } catch (error) {
+                            console.error('Error checking deposit:', error);
+                        }
+                    }, interval);
+                } else {
+                    console.error('Error:', xhr.statusText);
                 }
-            }, interval);
+            }
+        };
+
+        const requestData = JSON.stringify({
+            amount: transactionValue,
+            address: tonConnectUI.account.address,
+            boc: result.boc
         });
+
+        xhr.send(requestData);
 
     } catch (error) {
         console.error("Failed to send transaction:", error);
     }
 }
-
 async function checkDeposit(msgHash) {
     try {
         const response = await fetch(middlewareHost + "/status-deposit", {
