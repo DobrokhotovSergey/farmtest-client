@@ -17,6 +17,20 @@ tonConnectUI.uiOptions = {
     }
 };
 
+tonConnectUI.connectionRestored.then(restored => {
+    if (restored) {
+        console.log(
+            'Connection restored. Wallet:',
+            JSON.stringify({
+                ...tonConnectUI.wallet,
+                ...tonConnectUI.walletInfo
+            })
+        );
+    } else {
+        console.log('Connection was not restored.');
+    }
+});
+
 const unsubscribe = tonConnectUI.onSingleWalletModalStateChange(() => {
     const currentAccount = tonConnectUI.account;
     const currentIsConnectedStatus = tonConnectUI.connected;
