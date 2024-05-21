@@ -17,6 +17,7 @@ tonConnectUI.uiOptions = {
     }
 };
 
+
 tonConnectUI.connectionRestored.then(restored => {
     if (restored) {
         console.log(
