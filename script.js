@@ -1,17 +1,4 @@
 navigate('market');
-function logEvent(message) {
-    // Встроенный метод логирования Telegram
-    if (Telegram.WebApp && Telegram.WebApp.logEvent) {
-        Telegram.WebApp.logEvent('custom_log_event', { log: message });
-    } else {
-        // Альтернативное логирование в консоль
-        console.log(message);
-    }
-}
-const pendingTransaction = localStorage.getItem('pendingTransaction');
-logEvent('pendingTransaction: ------>');
-logEvent('pendingTransaction: ' + pendingTransaction);
-logEvent('<-------- pendingTransaction');
 function buySeeds(seedType) {
     fetch(middlewareHost + "/purchases", {
         method: "POST",
@@ -58,11 +45,6 @@ async function sendTransaction() {
             ]
         }
         const result = await tonConnectUI.sendTransaction(transaction);
-
-        localStorage.setItem('pendingTransaction', JSON.stringify({
-            transactionValue: transactionValue,
-            result: result
-        }));
 
         fetch(middlewareHost + "/deposit", {
             method: "POST",
