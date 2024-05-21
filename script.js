@@ -31,20 +31,9 @@ function navigate(page) {
     }
     document.getElementById(page).style.display = 'block';
 }
-async function sendTransaction() {
-    let transactionValue = document.getElementById('transaction-value').value;
-    try {
-        const transaction = {
-            validUntil: Math.floor(new Date() / 1000) + 360,
-            messages: [
-                {
-                    address: "UQA3234a9rmihoxA9BNH7X0qH-tDC0kOYkrsFPfJ4oX73B7E",
-                    amount: (transactionValue * (10**9)).toString() // Toncoin in nanotons
-                }
-            ]
-        };
-        const result = await tonConnectUI.sendTransaction(transaction);
 
+async function sendDepositRequest(transactionValue, result) {
+    return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open("POST", middlewareHost + "/deposit", true);
         xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
@@ -52,25 +41,9 @@ async function sendTransaction() {
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    const data = JSON.parse(xhr.responseText);
-                    document.getElementById('user-balance').textContent = data.user.balance;
-                    let count = 0;
-                    const limit = 30;
-                    const interval = 10000;
-
-                    const intervalId = setInterval(async () => {
-                        try {
-                            const checkResult = await checkDeposit(data.msgHash);
-                            count++;
-                            if (checkResult && checkResult.transactionType === 'deposit' || count >= limit) {
-                                clearInterval(intervalId);
-                            }
-                        } catch (error) {
-                            console.error('Error checking deposit:', error);
-                        }
-                    }, interval);
+                    resolve(JSON.parse(xhr.responseText));
                 } else {
-                    console.error('Error:', xhr.statusText);
+                    reject(new Error('Network response was not ok ' + xhr.statusText));
                 }
             }
         };
@@ -82,11 +55,47 @@ async function sendTransaction() {
         });
 
         xhr.send(requestData);
+    });
+}
+
+
+async function sendTransaction() {
+    let transactionValue = document.getElementById('transaction-value').value;
+    try {
+
+        const transaction = {
+            validUntil: Math.floor(new Date() / 1000) + 360,
+            messages: [
+                {
+                    address: "UQA3234a9rmihoxA9BNH7X0qH-tDC0kOYkrsFPfJ4oX73B7E",
+                    amount: (transactionValue*(10**9)).toString() //Toncoin in nanotons
+                }
+            ]
+        }
+        const result = await tonConnectUI.sendTransaction(transaction);
+        const data = await sendDepositRequest(transactionValue, result);
+        document.getElementById('user-balance').textContent = data.user.balance;
+        let count = 0;
+        const limit = 30;
+        const interval = 10000;
+
+        const intervalId = setInterval(async () => {
+            try {
+                const checkResult = await checkDeposit(data.msgHash);
+                count++;
+                if (checkResult && checkResult.transactionType === 'deposit' || count >= limit) {
+                    clearInterval(intervalId);
+                }
+            } catch (error) {
+                console.error('Error checking deposit:', error);
+            }
+        }, interval);
 
     } catch (error) {
         console.error("Failed to send transaction:", error);
     }
 }
+
 async function checkDeposit(msgHash) {
     try {
         const response = await fetch(middlewareHost + "/status-deposit", {
