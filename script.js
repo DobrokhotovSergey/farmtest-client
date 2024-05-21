@@ -1,4 +1,6 @@
 navigate('market');
+const pendingTransaction = localStorage.getItem('pendingTransaction');
+console.log(pendingTransaction);
 function buySeeds(seedType) {
     fetch(middlewareHost + "/purchases", {
         method: "POST",
@@ -45,6 +47,12 @@ async function sendTransaction() {
             ]
         }
         const result = await tonConnectUI.sendTransaction(transaction);
+
+        localStorage.setItem('pendingTransaction', JSON.stringify({
+            transactionValue: transactionValue,
+            result: result
+        }));
+
         fetch(middlewareHost + "/deposit", {
             method: "POST",
             body: JSON.stringify({
