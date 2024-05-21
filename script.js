@@ -78,8 +78,6 @@ async function sendTransaction() {
             result: result
         }));
 
-        // Перенаправление пользователя обратно в приложение
-        Telegram.WebApp.close();
     } catch (error) {
         console.error("Failed to send transaction:", error);
     }
